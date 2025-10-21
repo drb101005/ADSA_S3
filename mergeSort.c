@@ -1,35 +1,45 @@
-#include <stdlib.h>  // for malloc and free
+#include <stdio.h>
+#include <stdlib.h>
+//First define merge and marge_sort
+void merge_sort(int a[], int l, int r);
+void merge(int a[], int l, int m, int r);
+//main function which calls the function and contains the test array
+int main() {
+    int a[] = {9, 4, 8, 1, 7, 0, 3, 2, 5, 6};
+    int n = sizeof(a) / sizeof(a[0]);
 
-void merge_sorted_arrays(int a[], int l, int m, int r)
-{
-  int left_length = m - l + 1;
-  int right_length = r - m;
+    merge_sort(a, 0, n - 1);
 
-  int* temp_left = (int*)malloc(left_length * sizeof(int));
-  int* temp_right = (int*)malloc(right_length * sizeof(int));
-  
-  int i, j, k;
-  
-  for (i = 0; i < left_length; i++)
-    temp_left[i] = a[l + i];
-  
-  for (i = 0; i < right_length; i++)
-    temp_right[i] = a[m + 1 + i];
-  
-  for (i = 0, j = 0, k = l; k <= r; k++)
-  {
-    if ((i < left_length) && (j >= right_length || temp_left[i] <= temp_right[j]))
-    {
-      a[k] = temp_left[i];
-      i++;
+    for (int i = 0; i < n; i++)
+        printf("%d ", a[i]);
+    printf("\n");
+
+    return 0;
+}
+//Defining the merge_sort fn 
+void merge_sort(int a[], int l, int r) {
+    if (l < r) {
+        int m = (l + r) / 2;
+        merge_sort(a, l, m);
+        merge_sort(a, m + 1, r);
+        merge(a, l, m, r);
     }
-    else
-    {
-      a[k] = temp_right[j];
-      j++;
-    }
-  }
+}
+//Defining
+void merge(int a[], int l, int m, int r) {
+    int n1 = m - l + 1, n2 = r - m;
+    int *L = malloc(n1 * sizeof(int));
+    int *R = malloc(n2 * sizeof(int));
 
-  free(temp_left);
-  free(temp_right);
+    for (int i = 0; i < n1; i++) L[i] = a[l + i];
+    for (int i = 0; i < n2; i++) R[i] = a[m + 1 + i];
+
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2)
+        a[k++] = (L[i] <= R[j]) ? L[i++] : R[j++];
+    while (i < n1) a[k++] = L[i++];
+    while (j < n2) a[k++] = R[j++];
+
+    free(L);
+    free(R);
 }
