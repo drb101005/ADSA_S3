@@ -1,32 +1,76 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node {
+struct Node {
     int data;
-    struct Node *l, *r;
-} Node;
+    struct Node* left;
+    struct Node* right;
+};
 
-Node* insert(Node* n, int v) {
-    if (!n) {
-        Node* t = malloc(sizeof(Node));
-        t->data = v; t->l = t->r = NULL;
-        return t;
-    }
-    if (v < n->data) n->l = insert(n->l, v);
-    else n->r = insert(n->r, v);
-    return n;
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
 }
 
-void inorder(Node* n) { if (n) { inorder(n->l); printf("%d ", n->data); inorder(n->r); } }
-void preorder(Node* n) { if (n) { printf("%d ", n->data); preorder(n->l); preorder(n->r); } }
-void postorder(Node* n) { if (n) { postorder(n->l); postorder(n->r); printf("%d ", n->data); } }
+struct Node* insert(struct Node* root, int data) {
+    if (root == NULL)
+        return createNode(data);
+    
+    if (data < root->data)
+        root->left = insert(root->left, data);
+    else if (data > root->data)
+        root->right = insert(root->right, data);
+    
+    return root;
+}
+
+void preOrder(struct Node* root) {
+    if (root != NULL) {
+        printf("%d ", root->data);
+        preOrder(root->left);
+        preOrder(root->right);
+    }
+}
+
+void inOrder(struct Node* root) {
+    if (root != NULL) {
+        inOrder(root->left);
+        printf("%d ", root->data);
+        inOrder(root->right);
+    }
+}
+
+void postOrder(struct Node* root) {
+    if (root != NULL) {
+        postOrder(root->left);
+        postOrder(root->right);
+        printf("%d ", root->data);
+    }
+}
 
 int main() {
-    int a[] = {9,4,8,1,7,0,3,2,5,6}, n = 10;
-    Node* root = NULL;
-    for (int i = 0; i < n; i++) root = insert(root, a[i]);
-
-    printf("In: "); inorder(root); printf("\n");
-    printf("Pre: "); preorder(root); printf("\n");
-    printf("Post: "); postorder(root); printf("\n");
+    struct Node* root = NULL;
+    
+    root = insert(root, 50);
+    insert(root, 30);
+    insert(root, 70);
+    insert(root, 20);
+    insert(root, 40);
+    insert(root, 60);
+    insert(root, 80);
+    
+    printf("PreOrder:  ");
+    preOrder(root);
+    
+    printf("\nInOrder:   ");
+    inOrder(root);
+    
+    printf("\nPostOrder: ");
+    postOrder(root);
+    printf("\n");
+    
+    return 0;
 }

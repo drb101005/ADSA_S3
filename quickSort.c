@@ -1,52 +1,43 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-// Function declarations
-void quick_sort(int a[], int low, int high);
-int partition(int a[], int low, int high);
-
-// Main function with test array
-int main() {
-    int a[] = {9, 4, 8, 1, 7, 0, 3, 2, 5, 6};
-    int n = sizeof(a) / sizeof(a[0]);
-
-    quick_sort(a, 0, n - 1);
-
-    for (int i = 0; i < n; i++)
-        printf("%d ", a[i]);
-    printf("\n");
-
-    return 0;
-}
-
-// Quick sort function
-void quick_sort(int a[], int low, int high) {
-    if (low < high) {
-        int pi = partition(a, low, high);
-        quick_sort(a, low, pi - 1);
-        quick_sort(a, pi + 1, high);
-    }
-}
-
-// Partition function (Lomuto partition scheme)
-int partition(int a[], int low, int high) {
-    int pivot = a[high];
-    int i = low - 1;
-
-    for (int j = low; j < high; j++) {
+int partition(int a[], int start, int end) {
+    int pivot = a[end];
+    int i = start;
+    
+    for (int j = start; j < end; j++) {
         if (a[j] <= pivot) {
-            i++;
-            // Swap a[i] and a[j]
             int temp = a[i];
             a[i] = a[j];
             a[j] = temp;
+            i++;
         }
     }
+    int temp = a[i];
+    a[i] = a[end];
+    a[end] = temp;
+    return i;
+}
 
-    // Swap pivot to correct position
-    int temp = a[i + 1];
-    a[i + 1] = a[high];
-    a[high] = temp;
+void quickSort(int a[], int start, int end) {
+    if (start < end) {
+        int pi = partition(a, start, end);
+        quickSort(a, start, pi - 1);
+        quickSort(a, pi + 1, end);
+    }
+}
 
-    return i + 1;
+int main() {
+    int a[] = {64, 34, 25, 12, 22, 11, 90};
+    int n = sizeof(a) / sizeof(a[0]);
+    
+    printf("Before: ");
+    for (int i = 0; i < n; i++) printf("%d ", a[i]);
+    
+    quickSort(a, 0, n - 1);
+    
+    printf("\nAfter:  ");
+    for (int i = 0; i < n; i++) printf("%d ", a[i]);
+    printf("\n");
+    
+    return 0;
 }
