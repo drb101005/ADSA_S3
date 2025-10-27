@@ -3,74 +3,61 @@
 
 struct Node {
     int data;
-    struct Node* left;
-    struct Node* right;
+    struct Node *left, *right;
 };
 
-struct Node* createNode(int data) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode->data = data;
-    newNode->left = NULL;
-    newNode->right = NULL;
-    return newNode;
+struct Node* newNode(int val) {
+    struct Node* n = malloc(sizeof(struct Node));
+    n->data = val;
+    n->left = n->right = NULL;
+    return n;
 }
 
-struct Node* insert(struct Node* root, int data) {
-    if (root == NULL)
-        return createNode(data);
-    
-    if (data < root->data)
-        root->left = insert(root->left, data);
-    else if (data > root->data)
-        root->right = insert(root->right, data);
-    
+struct Node* insert(struct Node* root, int val) {
+    if (!root) return newNode(val);
+    (val < root->data) ? (root->left = insert(root->left, val)) : (root->right = insert(root->right, val));
     return root;
 }
 
-void preOrder(struct Node* root) {
-    if (root != NULL) {
+void inorder(struct Node* root) {
+    if(root){
+        inorder(root->left);
         printf("%d ", root->data);
-        preOrder(root->left);
-        preOrder(root->right);
+        inorder(root->right);
     }
 }
 
-void inOrder(struct Node* root) {
-    if (root != NULL) {
-        inOrder(root->left);
+void preorder(struct Node* root) {
+    if(root){
         printf("%d ", root->data);
-        inOrder(root->right);
+        preorder(root->left);
+        preorder(root->right);
     }
 }
 
-void postOrder(struct Node* root) {
-    if (root != NULL) {
-        postOrder(root->left);
-        postOrder(root->right);
+void postorder(struct Node* root) {
+    if(root){
+        postorder(root->left);
+        postorder(root->right);
         printf("%d ", root->data);
     }
 }
 
 int main() {
     struct Node* root = NULL;
-    
-    root = insert(root, 50);
-    insert(root, 30);
-    insert(root, 70);
-    insert(root, 20);
-    insert(root, 40);
-    insert(root, 60);
-    insert(root, 80);
-    
-    printf("PreOrder:  ");
-    preOrder(root);
-    
-    printf("\nInOrder:   ");
-    inOrder(root);
-    
-    printf("\nPostOrder: ");
-    postOrder(root);
-    printf("\n");
-    
+    int n, val;
+    printf("Enter number of nodes: ");
+    scanf("%d", &n);
+    for(int i = 0; i < n; i++) {
+        printf("Enter value %d: ", i+1);
+        scanf("%d", &val);
+        root = insert(root, val);
+    }
+    printf("Inorder: ");
+    inorder(root);
+    printf("\nPreorder: ");
+    preorder(root);
+    printf("\nPostorder: ");
+    postorder(root);
     return 0;
 }
