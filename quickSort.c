@@ -1,37 +1,65 @@
-#include <stdio.h> 
- 
-void swap(int *a, int *b) { 
-    int t = *a; *a = *b; *b = t; 
-} 
- 
-int partition(int a[], int low, int high) { 
-    int pivot = a[high]; 
-    int i = low - 1; 
-    for (int j = low; j < high; j++) { 
-        if (a[j] < pivot) { 
-            i++; 
-            swap(&a[i], &a[j]); 
-        } 
-    } 
-    swap(&a[i + 1], &a[high]); 
-    return i + 1; 
-} 
- 
-void quickSort(int a[], int low, int high) { 
-    if (low < high) { 
-        int pi = partition(a, low, high); 
-        quickSort(a, low, pi - 1); 
-        quickSort(a, pi + 1, high); 
-} 
-} 
-int main() { 
-int a[50], n; 
-printf("Enter number of elements: "); 
-scanf("%d", &n); 
-printf("Enter %d integers:\n", n); 
-for (int i = 0; i < n; i++) scanf("%d", &a[i]); 
-quickSort(a, 0, n - 1); 
-printf("Sorted array using Quick Sort:\n"); 
-for (int i = 0; i < n; i++) printf("%d ", a[i]); 
-return 0; 
+#include <stdio.h>
+
+int a[100];
+void quicksort(int low, int high);
+int partition(int low, int high);
+
+void main()
+{
+    int i, n;
+
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter the elements one by one:\n");
+    for (i = 0; i < n; i++)
+    {
+        printf("Element %d: ", i + 1);
+        scanf("%d", &a[i]);
+    }
+
+    quicksort(0, n - 1);
+
+    printf("\n--- Sorted Array ---\n");
+    for (i = 0; i < n; i++)
+    {
+        printf("%d ", a[i]);
+    }
+    printf("\n");
+}
+
+void quicksort(int low, int high)
+{
+    if (low < high)
+    {
+        int p;
+        p = partition(low, high);
+        quicksort(low, p - 1);
+        quicksort(p + 1, high);
+    }
+}
+
+int partition(int low, int high)
+{
+    int temp;
+    int pivot = a[high];
+    int i = low - 1;
+    int j;
+
+    for (j = low; j < high; j++)
+    {
+        if (a[j] < pivot)
+        {
+            i++;
+            temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+        }
+    }
+
+    temp = a[i + 1];
+    a[i + 1] = a[high];
+    a[high] = temp;
+
+    return i + 1;
 }

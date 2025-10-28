@@ -1,36 +1,82 @@
-#include <stdio.h> 
- 
-void merge(int a[], int l, int m, int r) { 
-    int n1 = m - l + 1, n2 = r - m; 
-    int L[50], R[50]; 
-    for (int i = 0; i < n1; i++) L[i] = a[l + i]; 
-    for (int j = 0; j < n2; j++) R[j] = a[m + 1 + j]; 
-    int i = 0, j = 0, k = l; 
-    while (i < n1 && j < n2) 
-        a[k++] = (L[i] <= R[j]) ? L[i++] : R[j++]; 
-    while (i < n1) a[k++] = L[i++]; 
-    while (j < n2) a[k++] = R[j++]; 
-} 
- 
-void mergeSort(int a[], int l, int r) { 
-    if (l < r) { 
-        int m = (l + r) / 2; 
-        mergeSort(a, l, m); 
-        mergeSort(a, m + 1, r); 
-        merge(a, l, m, r); 
-    } 
-} 
- 
-int main() { 
-    int a[50], n; 
-    printf("Enter number of elements: "); 
-    scanf("%d", &n); 
-    printf("Enter %d integers:\n", n); 
-    for (int i = 0; i < n; i++) scanf("%d", &a[i]); 
- 
-    mergeSort(a, 0, n - 1); 
- 
-    printf("Sorted array using Merge Sort:\n"); 
-    for (int i = 0; i < n; i++) printf("%d ", a[i]); 
-    return 0; 
-} 
+#include<stdio.h>
+
+int a[100];
+
+void mergesort(int l,int r);
+void conquer(int l,int mid,int r);
+
+void main()
+{
+    int n , j,i;
+    printf("Enter the size of the array\n");
+    scanf("%d",&n);
+
+    for(i=0;i<=n-1;i++)
+    {
+        printf("Enter the no: \n");
+        scanf("%d",&a[i]);
+    }
+
+    mergesort(0,n-1);
+
+    printf("sorted array is:\n");
+    for(i=0;i<=n-1;i++)
+    {
+        printf("%d ",a[i]);
+    }
+}
+
+void mergesort(int l , int r)
+{
+    if(l<r)
+    {
+        int mid=(l+r)/2;
+        mergesort(l,mid);          
+        mergesort(mid+1, r);
+        conquer(l,mid,r);         
+    }
+}
+
+void conquer(int l,int mid,int r)
+{
+    int w[100];                    
+    int h=0;
+    int i=l;
+    int j=mid+1;
+
+    while(i<=mid && j<=r)
+    {
+        if(a[i] < a[j])           
+        {
+            w[h]=a[i];
+            i++;
+        }
+        else
+        {
+            w[h]=a[j];
+            j++;
+        }
+        h++;
+    }
+
+    while(i<=mid)                  
+    {
+        w[h]=a[i];
+        i++;
+        h++;
+    }
+
+    while(j<=r)
+    {
+        w[h]=a[j];
+        j++;
+        h++;
+    }
+
+    
+    int k;
+    for(k=0; k<h; k++)
+    {
+        a[l+k]=w[k];
+    }
+}
